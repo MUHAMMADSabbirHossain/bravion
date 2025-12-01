@@ -4,13 +4,6 @@ export declare const auth: import("better-auth").Auth<{
         enabled: true;
     };
     trustedOrigins: string[];
-    advanced: {
-        defaultCookieAttributes: {
-            secure: true;
-            sameSite: "none";
-            partitioned: true;
-        };
-    };
     socialProviders: {
         google: {
             clientId: string;
@@ -849,14 +842,116 @@ export declare const auth: import("better-auth").Auth<{
             };
         };
         options: any;
-    }];
-    user: {
-        additionalFields: {
-            role: {
-                type: "string";
-                input: false;
+    }, {
+        id: "custom-session";
+        hooks: {
+            after: {
+                matcher: (ctx: import("better-auth").HookEndpointContext) => boolean;
+                handler: (inputContext: import("better-auth").MiddlewareInputContext<import("better-auth").MiddlewareOptions>) => Promise<{
+                    session: {
+                        id: string;
+                        createdAt: Date;
+                        updatedAt: Date;
+                        userId: string;
+                        expiresAt: Date;
+                        token: string;
+                        ipAddress?: string | null | undefined;
+                        userAgent?: string | null | undefined;
+                    };
+                    user: {
+                        newField: string;
+                        id: string;
+                        createdAt: Date;
+                        updatedAt: Date;
+                        email: string;
+                        emailVerified: boolean;
+                        name: string;
+                        image?: string | null | undefined;
+                    };
+                }[] | undefined>;
+            }[];
+        };
+        endpoints: {
+            getSession: import("better-auth").StrictEndpoint<"/get-session", {
+                method: "GET";
+                query: import("better-auth").ZodOptional<import("better-auth").ZodObject<{
+                    disableCookieCache: import("better-auth").ZodOptional<import("better-auth").ZodUnion<[import("better-auth").ZodBoolean, import("better-auth").ZodPipe<import("better-auth").ZodString, import("better-auth").ZodTransform<boolean, string>>]>>;
+                    disableRefresh: import("better-auth").ZodOptional<import("better-auth").ZodBoolean>;
+                }, import("better-auth").$strip>>;
+                metadata: {
+                    CUSTOM_SESSION: boolean;
+                    openapi: {
+                        description: string;
+                        responses: {
+                            "200": {
+                                description: string;
+                                content: {
+                                    "application/json": {
+                                        schema: {
+                                            type: "array";
+                                            nullable: boolean;
+                                            items: {
+                                                $ref: string;
+                                            };
+                                        };
+                                    };
+                                };
+                            };
+                        };
+                    };
+                };
+                requireHeaders: true;
+            } & {
+                use: any[];
+            }, {
+                session: {
+                    id: string;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    userId: string;
+                    expiresAt: Date;
+                    token: string;
+                    ipAddress?: string | null | undefined;
+                    userAgent?: string | null | undefined;
+                };
+                user: {
+                    newField: string;
+                    id: string;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    email: string;
+                    emailVerified: boolean;
+                    name: string;
+                    image?: string | null | undefined;
+                };
+            } | null>;
+        };
+        $Infer: {
+            Session: {
+                session: {
+                    id: string;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    userId: string;
+                    expiresAt: Date;
+                    token: string;
+                    ipAddress?: string | null | undefined;
+                    userAgent?: string | null | undefined;
+                };
+                user: {
+                    newField: string;
+                    id: string;
+                    createdAt: Date;
+                    updatedAt: Date;
+                    email: string;
+                    emailVerified: boolean;
+                    name: string;
+                    image?: string | null | undefined;
+                };
             };
         };
-    };
+    }];
 }>;
+export type Session = typeof auth.$Infer.Session;
+export type User = typeof auth.$Infer.Session.user;
 //# sourceMappingURL=auth.d.ts.map
