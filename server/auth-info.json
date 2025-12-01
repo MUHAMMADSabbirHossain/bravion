@@ -1,0 +1,154 @@
+{
+  "system": {
+    "platform": "linux",
+    "arch": "x64",
+    "version": "#36~24.04.1-Ubuntu SMP PREEMPT_DYNAMIC Wed Oct 15 15:45:17 UTC 2",
+    "release": "6.14.0-36-generic",
+    "cpuCount": 12,
+    "cpuModel": "AMD Ryzen 5 3600 6-Core Processor",
+    "totalMemory": "7.70 GB",
+    "freeMemory": "1.72 GB"
+  },
+  "node": {
+    "version": "v24.11.1",
+    "env": "development"
+  },
+  "packageManager": {
+    "name": "npm",
+    "version": "11.6.2"
+  },
+  "frameworks": [
+    {
+      "name": "express",
+      "version": "^5.1.0"
+    }
+  ],
+  "databases": [
+    {
+      "name": "pg",
+      "version": "^8.16.3"
+    },
+    {
+      "name": "@prisma/client",
+      "version": "^7.0.0"
+    }
+  ],
+  "betterAuth": {
+    "version": "^1.4.1",
+    "config": {
+      "emailAndPassword": {
+        "enabled": true
+      },
+      "trustedOrigins": [
+        "http://localhost:3000"
+      ],
+      "advanced": {
+        "defaultCookieAttributes": {
+          "secure": true,
+          "sameSite": "none",
+          "partitioned": true
+        }
+      },
+      "socialProviders": {
+        "google": {
+          "clientId": "[REDACTED]",
+          "clientSecret": "[REDACTED]"
+        }
+      },
+      "user": {
+        "additionalFields": {
+          "role": {
+            "type": "string",
+            "input": false
+          }
+        }
+      },
+      "plugins": [
+        {
+          "name": "admin",
+          "config": {
+            "id": "admin",
+            "hooks": {
+              "after": [
+                {}
+              ]
+            },
+            "endpoints": {},
+            "$ERROR_CODES": {
+              "FAILED_TO_CREATE_USER": "Failed to create user",
+              "USER_ALREADY_EXISTS": "User already exists.",
+              "USER_ALREADY_EXISTS_USE_ANOTHER_EMAIL": "User already exists. Use another email.",
+              "YOU_CANNOT_BAN_YOURSELF": "You cannot ban yourself",
+              "YOU_ARE_NOT_ALLOWED_TO_CHANGE_USERS_ROLE": "You are not allowed to change users role",
+              "YOU_ARE_NOT_ALLOWED_TO_CREATE_USERS": "You are not allowed to create users",
+              "YOU_ARE_NOT_ALLOWED_TO_LIST_USERS": "You are not allowed to list users",
+              "YOU_ARE_NOT_ALLOWED_TO_LIST_USERS_SESSIONS": "You are not allowed to list users sessions",
+              "YOU_ARE_NOT_ALLOWED_TO_BAN_USERS": "You are not allowed to ban users",
+              "YOU_ARE_NOT_ALLOWED_TO_IMPERSONATE_USERS": "You are not allowed to impersonate users",
+              "YOU_ARE_NOT_ALLOWED_TO_REVOKE_USERS_SESSIONS": "You are not allowed to revoke users sessions",
+              "YOU_ARE_NOT_ALLOWED_TO_DELETE_USERS": "You are not allowed to delete users",
+              "YOU_ARE_NOT_ALLOWED_TO_SET_USERS_PASSWORD": "[REDACTED]",
+              "BANNED_USER": "You have been banned from this application",
+              "YOU_ARE_NOT_ALLOWED_TO_GET_USER": "You are not allowed to get user",
+              "NO_DATA_TO_UPDATE": "No data to update",
+              "YOU_ARE_NOT_ALLOWED_TO_UPDATE_USERS": "You are not allowed to update users",
+              "YOU_CANNOT_REMOVE_YOURSELF": "You cannot remove yourself",
+              "YOU_ARE_NOT_ALLOWED_TO_SET_NON_EXISTENT_VALUE": "You are not allowed to set a non-existent role value"
+            },
+            "schema": {
+              "user": {
+                "fields": {
+                  "role": {
+                    "type": "string",
+                    "required": false,
+                    "input": false
+                  },
+                  "banned": {
+                    "type": "boolean",
+                    "defaultValue": false,
+                    "required": false,
+                    "input": false
+                  },
+                  "banReason": {
+                    "type": "string",
+                    "required": false,
+                    "input": false
+                  },
+                  "banExpires": {
+                    "type": "date",
+                    "required": false,
+                    "input": false
+                  }
+                }
+              },
+              "session": {
+                "fields": {
+                  "impersonatedBy": {
+                    "type": "string",
+                    "required": false
+                  }
+                }
+              }
+            },
+            "options": {}
+          }
+        },
+        {
+          "name": "custom-session",
+          "config": {
+            "id": "custom-session",
+            "hooks": {
+              "after": [
+                {}
+              ]
+            },
+            "endpoints": {},
+            "$Infer": {
+              "Session": {}
+            }
+          }
+        }
+      ]
+    }
+  }
+}
