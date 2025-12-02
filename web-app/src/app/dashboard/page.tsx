@@ -8,7 +8,7 @@ async function DashboardPage() {
       headers: { cookie: (await headers()).get("cookie") || "" },
     },
   });
-  console.log(session);
+  // console.log(session);
 
   if (session === null || !session?.user?.id || error !== null) {
     return unauthorized();

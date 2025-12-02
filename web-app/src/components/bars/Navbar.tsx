@@ -15,7 +15,7 @@ async function Navbar() {
       headers: { cookie: (await headers()).get("cookie") || "" },
     },
   });
-  console.log({ session, error });
+  // console.log({ session, error });
 
   return (
     <nav>
