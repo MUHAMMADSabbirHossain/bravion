@@ -1,6 +1,6 @@
 import Link from "next/link";
 import LogoutButton from "../buttons/LogoutButton";
-import { authClient } from "@/lib/auth-client";
+import { betterAuthGetSeesion } from "@/lib/auth-client";
 import { headers } from "next/headers";
 
 const navItems = [
@@ -10,10 +10,8 @@ const navItems = [
 ];
 
 async function Navbar() {
-  const { data: session, error } = await authClient.getSession({
-    fetchOptions: {
-      headers: { cookie: (await headers()).get("cookie") || "" },
-    },
+  const { data: session, error } = await betterAuthGetSeesion({
+    cookie: (await headers()).get("cookie") || "",
   });
   // console.log({ session, error });
 
