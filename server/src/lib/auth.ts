@@ -3,7 +3,6 @@ import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./prisma.js";
 import { admin, emailOTP } from "better-auth/plugins";
 import { nodemailerSendMail } from "./nodemailer.js";
-import nodemailer from "nodemailer";
 // If your Prisma file is located elsewhere, you can change the path
 // import { PrismaClient } from "@/generated/prisma/client";
 
@@ -39,7 +38,7 @@ export const auth = betterAuth({
           console.log({ email, otp });
         } else if (type === "email-verification") {
           // Send the OTP for email verification
-          console.log({ email, otp });
+          console.log("Email verification", { email, otp });
 
           try {
             const info = await nodemailerSendMail({
@@ -57,7 +56,7 @@ export const auth = betterAuth({
           }
         } else {
           // Send the OTP for password reset
-          console.log({ email, otp });
+          console.log("Password reset", { email, otp });
         }
       },
     }),

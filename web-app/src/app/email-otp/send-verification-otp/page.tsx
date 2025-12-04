@@ -1,7 +1,8 @@
 "use client";
 
 import { authClient } from "@/lib/auth-client";
-import { redirect, unauthorized } from "next/navigation";
+import { redirect } from "next/navigation";
+import { useEffect } from "react";
 
 function SendVerificationOtpPage() {
   const {
@@ -13,9 +14,12 @@ function SendVerificationOtpPage() {
   } = authClient.useSession();
   console.log({ session, error });
 
-  if (session?.user?.emailVerified === true && error !== null) {
-    redirect("/email-otp/success-verification-otp");
-  }
+  useEffect(() => {
+    console.log("test");
+    if (session?.user?.emailVerified === true) {
+      redirect("/email-otp/success-verification-otp");
+    }
+  });
 
   async function handleSendVerificationOtp() {
     const { data, error } = await authClient.emailOtp.sendVerificationOtp({
@@ -25,7 +29,7 @@ function SendVerificationOtpPage() {
     console.log({ data, error });
 
     if (data?.success === true && error === null) {
-      redirect("/email-otp/check-verification-otp");
+      redirect("/email-otp/verify-email");
     }
   }
 

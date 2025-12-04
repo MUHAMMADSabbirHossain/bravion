@@ -4,7 +4,7 @@ import { authClient } from "@/lib/auth-client";
 import { redirect } from "next/navigation";
 import { ChangeEvent, FormEvent, useEffect, useState } from "react";
 
-function CheckVerificationOtpPage() {
+function VerifyEmailPage() {
   const [otp, setOtp] = useState("");
 
   const {
@@ -34,27 +34,28 @@ function CheckVerificationOtpPage() {
   async function handleCheckVerificationOtpSubmit(event: FormEvent) {
     event.preventDefault();
 
-    console.log(otp);
-
-    const { data, error } = await authClient.emailOtp.checkVerificationOtp({
+    const { data, error } = await authClient.emailOtp.verifyEmail({
       email: session?.user?.email as string,
-      type: "email-verification",
       otp,
     });
     console.log({ data, error });
 
-    if (data?.success === true && error === null) {
+    if (
+      data?.status === true &&
+      data?.user?.emailVerified === true &&
+      error === null
+    ) {
       alert("OTP is valid");
       redirect("/email-otp/success-verification-otp");
     } else {
-      alert("Invalid OTP");
+      alert(JSON.stringify(error));
       redirect("/email-otp/send-verification-otp");
     }
   }
 
   return (
     <>
-      CheckVerificationOtpPage
+      VerifyEmailPage
       <form onSubmit={handleCheckVerificationOtpSubmit}>
         <fieldset>
           <legend>Email Verification OTP</legend>
@@ -76,4 +77,4 @@ function CheckVerificationOtpPage() {
   );
 }
 
-export default CheckVerificationOtpPage;
+export default VerifyEmailPage;

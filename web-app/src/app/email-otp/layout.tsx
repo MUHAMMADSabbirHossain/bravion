@@ -12,6 +12,7 @@ async function layout({ children }: { children: ReactNode }) {
   if (session === null || !session?.user?.id || error !== null) {
     return unauthorized();
   }
+
   return <>{children}</>;
 }
 
