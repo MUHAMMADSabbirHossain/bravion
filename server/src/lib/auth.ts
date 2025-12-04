@@ -1,7 +1,7 @@
-import { betterAuth } from "better-auth";
+import { APIError, betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./prisma.js";
-import { admin, emailOTP } from "better-auth/plugins";
+import { admin, createAuthMiddleware, emailOTP } from "better-auth/plugins";
 import { nodemailerSendMail } from "./nodemailer.js";
 // If your Prisma file is located elsewhere, you can change the path
 // import { PrismaClient } from "@/generated/prisma/client";
@@ -76,4 +76,25 @@ export const auth = betterAuth({
       },
     }),
   ],
+  hooks: {
+    before: createAuthMiddleware(async (ctx) => {
+      console.log({ ctx });
+
+      if (
+        ctx.path === "/sign-up/email" ||
+        ctx.path === "/email-otp/reset-password"||
+        ctx.path === "/change-password"
+      ) {
+        const password = ctx.body.password;
+        const confirmPassword = ctx.body.confirmPassword;
+        // TODO!!!!: ues zod and validate
+
+        if (false) {
+          throw new APIError("BAD_REQUEST", {
+            message: "Password not strong enough",
+          });
+        }
+      }
+    }),
+  },
 });
