@@ -21,7 +21,9 @@ async function ProfilePage() {
       {session?.user?.emailVerified === true ? (
         <p>Verified</p>
       ) : (
-        <Link href={""}>Please verify your account.</Link>
+        <Link href={"/email-otp/send-verification-otp"}>
+          Please verify your account.
+        </Link>
       )}
     </>
   );

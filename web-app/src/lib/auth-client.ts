@@ -1,4 +1,4 @@
-import { adminClient } from "better-auth/client/plugins";
+import { adminClient, emailOTPClient } from "better-auth/client/plugins";
 import { createAuthClient } from "better-auth/react";
 import { cache } from "react";
 
@@ -8,7 +8,7 @@ export const authClient = createAuthClient({
   fetchOptions: {
     credentials: "include", // Include cookies for authentication
   },
-  plugins: [adminClient()],
+  plugins: [adminClient(), emailOTPClient()],
 });
 
 // TODO: cache() is not working.

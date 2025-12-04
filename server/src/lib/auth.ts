@@ -1,7 +1,9 @@
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { prisma } from "./prisma.js";
-import { admin } from "better-auth/plugins";
+import { admin, emailOTP } from "better-auth/plugins";
+import { nodemailerSendMail } from "./nodemailer.js";
+import nodemailer from "nodemailer";
 // If your Prisma file is located elsewhere, you can change the path
 // import { PrismaClient } from "@/generated/prisma/client";
 
@@ -28,5 +30,36 @@ export const auth = betterAuth({
       clientSecret: process.env.GOOGLE_CLIENT_SECRET as string,
     }, // Authorized redirect URIs must set server domain with in google console before deployed to product
   },
-  plugins: [admin()],
+  plugins: [
+    admin(),
+    emailOTP({
+      async sendVerificationOTP({ email, otp, type }) {
+        if (type === "sign-in") {
+          // Send the OTP for sign in
+          console.log({ email, otp });
+        } else if (type === "email-verification") {
+          // Send the OTP for email verification
+          console.log({ email, otp });
+
+          try {
+            const info = await nodemailerSendMail({
+              to: email,
+              subject: "Email Verification",
+              html: `<p>Hello, ${email}. We received a request to verify your email.</p>
+              </br>
+              <p>Your verification code: </p><b>${otp}</b>`,
+            });
+            // console.log({ info });
+          } catch (error) {
+            console.log({ error });
+          } finally {
+            console.error("nodemailer function finished.");
+          }
+        } else {
+          // Send the OTP for password reset
+          console.log({ email, otp });
+        }
+      },
+    }),
+  ],
 });

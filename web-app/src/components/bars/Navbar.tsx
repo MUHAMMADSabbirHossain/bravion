@@ -27,6 +27,9 @@ async function Navbar() {
         {session && session?.user?.id ? (
           <>
             <li>
+              <Link href="/profile">Profile</Link>
+            </li>
+            <li>
               <Link href="/dashboard">Dashboard</Link>
             </li>
             <li>{session.user?.email}</li>
