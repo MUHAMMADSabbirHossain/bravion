@@ -57,6 +57,21 @@ export const auth = betterAuth({
         } else {
           // Send the OTP for password reset
           console.log("Password reset", { email, otp });
+
+          try {
+            const info = await nodemailerSendMail({
+              to: email,
+              subject: "Reset Account Password",
+              html: `<p>Hello, ${email}. We received a request to reset your password.</p>
+              </br>
+              <p>Your verification code: </p><b>${otp}</b>`,
+            });
+            console.log({ info });
+          } catch (error) {
+            console.log({ error });
+          } finally {
+            console.error("Reset password function finished.");
+          }
         }
       },
     }),

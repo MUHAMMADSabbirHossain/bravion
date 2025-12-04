@@ -3,6 +3,7 @@
 import { authClient } from "@/lib/auth-client";
 import { ChangeEvent, FormEvent, useState } from "react";
 import GoogleAuthButton from "../buttons/GoogleAuthButton";
+import Link from "next/link";
 
 function UserLoginForm() {
   const [formData, setFormData] = useState({
@@ -88,9 +89,11 @@ function UserLoginForm() {
 
         <button type="submit">Login</button>
       </form>
-
       <div>
-        <GoogleAuthButton text= {"Login with Google"}/>
+        <Link href="/forget-password/email-otp">Forget Password</Link>
+      </div>
+      <div>
+        <GoogleAuthButton text={"Login with Google"} />
       </div>
     </section>
   );
