@@ -1,7 +1,6 @@
 import { betterAuthGetSeesion } from "@/lib/auth-client";
 import { headers } from "next/headers";
 import Link from "next/link";
-import { unauthorized } from "next/navigation";
 
 async function ProfilePage() {
   const { data: session, error } = await betterAuthGetSeesion({
