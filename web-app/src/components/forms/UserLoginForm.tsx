@@ -2,8 +2,8 @@
 
 import { authClient } from "@/lib/auth-client";
 import { ChangeEvent, FormEvent, useState } from "react";
-import GoogleAuthButton from "../buttons/GoogleAuthButton";
 import Link from "next/link";
+import GoogleAuthButton from "../buttons/GoogleAuthButton";
 
 function UserLoginForm() {
   const [formData, setFormData] = useState({

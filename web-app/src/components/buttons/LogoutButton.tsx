@@ -13,7 +13,7 @@ function LogoutButton() {
       fetchOptions: {
         onSuccess: () => {
           router.refresh();
-          // redirect("/auth/login");
+          // redirect("/login");
         },
       },
     });

@@ -40,10 +40,10 @@ async function Navbar() {
         ) : (
           <>
             <li>
-              <Link href="/auth/login">Login</Link>
+              <Link href="/login">Login</Link>
             </li>
             <li>
-              <Link href="/auth/register">Register</Link>
+              <Link href="/register">Register</Link>
             </li>
           </>
         )}

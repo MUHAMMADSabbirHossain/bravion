@@ -7,7 +7,7 @@ function UnauthorizedPage() {
       <section>
         <p>Please log in to access this page.</p>
         <button>
-          <Link href="/auth/login">Login </Link>
+          <Link href="/login">Login </Link>
         </button>
       </section>
     </>

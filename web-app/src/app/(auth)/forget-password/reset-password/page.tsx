@@ -38,7 +38,7 @@ function ResetForgetPasswordPage({
 
     if (data?.success === true && error === null) {
       alert("Password reset successfully.");
-      redirect("/auth/login");
+      redirect("/login");
     } else {
       alert(JSON.stringify(error));
     }
