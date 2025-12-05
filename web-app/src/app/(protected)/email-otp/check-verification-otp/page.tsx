@@ -17,7 +17,6 @@ function CheckVerificationOtpPage() {
   console.log({ session, error });
 
   useEffect(() => {
-    console.log("test");
     if (session?.user?.emailVerified === true) {
       redirect("/email-otp/success-verification-otp");
     }
