@@ -1,15 +1,21 @@
 "use client";
 
 import { authClient } from "@/lib/auth-client";
-import { redirect, useSearchParams } from "next/navigation";
-import { ChangeEvent, FormEvent, useState } from "react";
+import { redirect } from "next/navigation";
+import { ChangeEvent, FormEvent, use, useState } from "react";
 
-function ResetForgetPasswordPage() {
+function ResetForgetPasswordPage({
+  params,
+  searchParams,
+}: {
+  params: Promise<any>;
+  searchParams: Promise<{ email: string }>;
+}) {
+  const { email } = use(searchParams);
   const [formData, setFormData] = useState({
     otp: "",
     password: "",
   });
-  const searchParams = useSearchParams();
 
   function handleChange(event: ChangeEvent<HTMLInputElement>) {
     const { name, value } = event.target;
@@ -24,7 +30,7 @@ function ResetForgetPasswordPage() {
     console.log(formData);
 
     const { data, error } = await authClient.emailOtp.resetPassword({
-      email: searchParams.get("email") as string,
+      email,
       otp: formData.otp,
       password: formData.password,
     });
