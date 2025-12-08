@@ -78,11 +78,11 @@ export const auth = betterAuth({
   ],
   hooks: {
     before: createAuthMiddleware(async (ctx) => {
-      console.log({ ctx });
+      // console.log({ ctx });
 
       if (
         ctx.path === "/sign-up/email" ||
-        ctx.path === "/email-otp/reset-password"||
+        ctx.path === "/email-otp/reset-password" ||
         ctx.path === "/change-password"
       ) {
         const password = ctx.body.password;

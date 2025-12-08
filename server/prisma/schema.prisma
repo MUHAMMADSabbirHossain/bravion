@@ -72,3 +72,17 @@ model Verification {
   @@index([identifier])
   @@map("verification")
 }
+
+model Product {
+  id          String   @id @default(uuid())
+  name        String?
+  slug        String?  @unique
+  title       String?
+  description String?
+  price       Decimal? @default(0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("product")
+}
