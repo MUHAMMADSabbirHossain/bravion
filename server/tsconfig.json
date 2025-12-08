@@ -42,8 +42,8 @@
     "skipLibCheck": true,
 
     // Prisma Configuration
-    "module": "ESNext",
-    "moduleResolution": "node",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "target": "ES2023",
     "strict": true,
     "esModuleInterop": true
