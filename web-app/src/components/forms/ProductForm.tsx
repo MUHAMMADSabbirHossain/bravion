@@ -31,7 +31,7 @@ function ProductForm() {
     };
 
     const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/products/post`,
+      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/products`,
       {
         method: "POST",
         headers: {

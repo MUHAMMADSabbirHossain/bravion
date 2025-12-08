@@ -9,7 +9,7 @@ async function AdminLayout({ children }: { children: ReactNode }) {
       headers: { cookie: (await headers()).get("cookie") || "" },
     },
   });
-  console.log({ session, error });
+  // console.log({ session, error });
 
   if (session === null || !session?.user?.id || error !== null)
     return unauthorized();

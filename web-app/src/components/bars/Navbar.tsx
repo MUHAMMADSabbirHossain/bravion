@@ -50,7 +50,7 @@ async function Navbar() {
       </ul>
 
       <pre className="text-xs">
-        {JSON.stringify({ session, error }, null, 2)}
+        {/* {JSON.stringify({ session, error }, null, 2)} */}
       </pre>
     </nav>
   );
