@@ -150,3 +150,49 @@ app.get(
     });
   }
 );
+
+app.get(
+  "/api/v1/admin/products/:productId",
+  verifyAuth,
+  verifyAdmin,
+  async (req: Request, res: Response) => {
+    const { productId } = req.params;
+
+    if (!productId) {
+      return res.status(400).json({
+        error: "Product id is required",
+        data: null,
+        pagination: null,
+        success: false,
+        message: "Bad Request",
+        status: 400,
+      });
+    }
+
+    const product = await prisma.product.findUnique({
+      where: {
+        id: productId,
+      },
+    });
+
+    if (!product) {
+      return res.status(404).json({
+        error: "Product not found",
+        data: null,
+        pagination: null,
+        success: false,
+        message: "Not Found",
+        status: 404,
+      });
+    }
+
+    res.status(200).send({
+      status: 200,
+      data: product,
+      pagination: null,
+      success: true,
+      error: null,
+      message: "Product fetched successfully",
+    });
+  }
+);

@@ -55,7 +55,13 @@ async function ProductsPage({
                   href={`/admin/products/${product.id}`}
                   className="bg-blue-500 p-2 rounded-lg"
                 >
-                  Update Product
+                  Details
+                </Link>
+                <Link
+                  href={`/admin/products/update/${product.id}`}
+                  className="bg-blue-500 p-2 rounded-lg"
+                >
+                  Update
                 </Link>
               </li>
             ))}
