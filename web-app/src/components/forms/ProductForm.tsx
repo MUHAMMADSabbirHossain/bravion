@@ -2,14 +2,21 @@
 
 import { ChangeEvent, FormEvent, useState } from "react";
 
-function ProductForm() {
+function ProductForm({
+  product: initialProduct,
+  mode,
+}: {
+  product: any;
+  mode: string;
+}) {
   const [newProduct, setNewProduct] = useState({
-    name: "",
-    slug: "",
-    title: "",
-    description: "",
-    price: 0,
+    name: initialProduct?.name ?? "",
+    // slug: initialProduct?.slug ?? "",
+    title: initialProduct?.title ?? "",
+    description: initialProduct?.description ?? "",
+    price: initialProduct?.price ?? 0,
   });
+  console.log(initialProduct, mode);
 
   function handleProductFormData(event: ChangeEvent<HTMLInputElement>) {
     setNewProduct({
@@ -20,34 +27,59 @@ function ProductForm() {
 
   async function handleProductFormSubmit(event: FormEvent) {
     event.preventDefault();
-    console.log(newProduct, document.cookie);
+    // console.log(newProduct, document.cookie);
 
     const payload = {
+      id: initialProduct?.id,
       name: newProduct.name,
-      slug: newProduct.slug,
+      // slug: newProduct.slug,
       title: newProduct.title,
       description: newProduct.description,
       price: Number(newProduct.price).toFixed(2),
     };
 
-    const response = await fetch(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/products`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        credentials: "include", // This automatically includes cookies
-        body: JSON.stringify(newProduct),
-      }
-    );
-    const data = await response.json();
-    console.log(data);
+    if (mode === "create") {
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/products`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include", // This automatically includes cookies
+          body: JSON.stringify(newProduct),
+        }
+      );
 
-    if (data?.success === true) {
-      alert("Product created successfully");
+      const data = await response.json();
+      console.log(data);
+
+      if (data?.success === true) {
+        alert("Product created successfully");
+      } else {
+        alert("Failed to create product");
+      }
     } else {
-      alert("Failed to create product");
+      const response = await fetch(
+        `${process.env.NEXT_PUBLIC_API_URL}/api/v1/admin/products/${initialProduct?.id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          credentials: "include", // This automatically includes cookies
+          body: JSON.stringify(newProduct),
+        }
+      );
+
+      const data = await response.json();
+      console.log(data);
+
+      if (data?.success === true) {
+        alert("Product updated successfully");
+      } else {
+        alert("Failed to update product");
+      }
     }
   }
 
@@ -104,7 +136,11 @@ function ProductForm() {
           </div>
         </fieldset>
 
-        <button type="submit">Create Product</button>
+        {mode === "create" ? (
+          <button type="submit">Create Product</button>
+        ) : (
+          <button type="submit">Update Product</button>
+        )}
       </form>
     </section>
   );

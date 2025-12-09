@@ -196,3 +196,58 @@ app.get(
     });
   }
 );
+
+app.put(
+  "/api/v1/admin/products/:id",
+  verifyAuth,
+  verifyAdmin,
+  async (
+    req: Request<{ id: string }, {}, Prisma.ProductCreateInput>,
+    res: Response
+  ) => {
+    console.log("Request Body:", req.body);
+    const { id } = req.params;
+
+    const {
+      name = null,
+      // slug = null, // do not take slug input from client
+      title = null,
+      description = null,
+      price = null,
+    } = req.body;
+
+    // Validate ID is provided
+    if (!id) {
+      return res.status(400).json({
+        status: 400,
+        message: "Product ID is required.",
+        success: false,
+        data: null,
+        pagination: null,
+        error: "Missing ID",
+      });
+    }
+
+    const updatedProduct = await prisma.product.update({
+      where: {
+        id,
+      },
+      data: {
+        name,
+        slug: generateSlug(name || ""),
+        title,
+        description,
+        price: Number(price).toFixed(2),
+      },
+    });
+
+    res.status(200).json({
+      status: 200,
+      message: "Product updated successfully", // Or "created" if it was a new upsert
+      success: true,
+      data: { product: updatedProduct },
+      pagination: null,
+      error: null,
+    });
+  }
+);

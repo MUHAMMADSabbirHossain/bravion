@@ -3,7 +3,7 @@ import ProductForm from "@/components/forms/ProductForm";
 function CreateProductPage() {
   return (
     <>
-      <ProductForm />
+      <ProductForm mode="create" product={null} />
     </>
   );
 }
