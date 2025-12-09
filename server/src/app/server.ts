@@ -251,3 +251,39 @@ app.put(
     });
   }
 );
+
+app.delete(
+  "/api/v1/admin/products/:id",
+  verifyAuth,
+  verifyAdmin,
+  async (req: Request, res: Response) => {
+    const { id } = req.params;
+
+    if (!id) {
+      return res.status(400).json({
+        status: 400,
+        message: "Product ID is required.",
+        success: false,
+        data: null,
+        pagination: null,
+        error: "Bad Request",
+      });
+    }
+
+    const deletedProduct = await prisma.product.delete({
+      where: {
+        id,
+      },
+    });
+    console.log(deletedProduct);
+
+    res.status(200).json({
+      status: 200,
+      message: "Product deleted successfully",
+      success: true,
+      data: { product: deletedProduct },
+      pagination: null,
+      error: null,
+    });
+  }
+);
