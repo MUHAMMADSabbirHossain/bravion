@@ -287,3 +287,50 @@ app.delete(
     });
   }
 );
+
+app.get("/api/v1/products", async (req: Request, res: Response) => {
+  // console.log(req.query.page, req.query.limit);
+  const { page = 1, limit = 10 } = req.query;
+
+  const pageNumber = Number(page);
+  const limitNumber = Number(limit);
+
+  // Validate query parameters (optional but recommended)
+  if (pageNumber < 1 || limitNumber < 1) {
+    return res.status(400).json({
+      error: "Page and limit must be positive numbers.",
+      data: null,
+      success: false,
+      message: "Bad Request",
+      status: 400,
+      pagination: null,
+    });
+  }
+
+  const products = await prisma.product.findMany({
+    skip: (pageNumber - 1) * limitNumber,
+    take: limitNumber,
+  });
+  // console.log products );
+
+  const totalProducts = await prisma.product.count();
+  const totalPages = Math.ceil(totalProducts / limitNumber);
+  const hasNextPage = pageNumber < totalPages;
+  const hasPreviousPage = pageNumber > 1;
+
+  res.send({
+    status: 200,
+    data: products,
+    pagination: {
+      currentPage: pageNumber,
+      totalPages,
+      totalItems: totalProducts,
+      hasNextPage,
+      hasPreviousPage,
+      limit: limitNumber,
+    },
+    success: true,
+    error: null,
+    message: "Products fetched successfully",
+  });
+});
