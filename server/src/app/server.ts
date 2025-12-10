@@ -334,3 +334,45 @@ app.get("/api/v1/products", async (req: Request, res: Response) => {
     message: "Products fetched successfully",
   });
 });
+
+app.get("/api/v1/products/:id", async (req: Request, res: Response) => {
+  const { id } = req.params;
+  console.log(id);
+
+  if (!id) {
+    return res.status(400).json({
+      status: 400,
+      message: "Product ID is required.",
+      success: false,
+      data: null,
+      pagination: null,
+      error: "Bad Request",
+    });
+  }
+
+  const product = await prisma.product.findUnique({
+    where: {
+      id,
+    },
+  });
+
+  if (!product) {
+    return res.status(404).json({
+      status: 404,
+      message: "Product not found",
+      success: false,
+      data: null,
+      pagination: null,
+      error: "Not Found",
+    });
+  }
+
+  res.status(200).json({
+    status: 200,
+    message: "Product fetched successfully",
+    success: true,
+    data: { product },
+    pagination: null,
+    error: null,
+  });
+});

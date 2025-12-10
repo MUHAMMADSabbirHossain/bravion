@@ -40,7 +40,7 @@ async function ShopPage({
                 <p>Description: {product?.description}</p>
                 <p>Price: {product?.price}</p>
                 <Link
-                  href={`/shop/${product?.slug}/?productId=${product?.id}`}
+                  href={`/shop/products/${product?.slug}/?productId=${product?.id}`}
                   className="bg-orange-500 p-2 rounded-lg block text-center"
                 >
                   View Product
