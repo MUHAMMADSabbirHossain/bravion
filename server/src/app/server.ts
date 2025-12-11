@@ -496,3 +496,39 @@ app.put(
     });
   }
 );
+
+app.get("/api/v1/cart", verifyAuth, async (req: Request, res: Response) => {
+  const cart = await prisma.cart.findUnique({
+    where: {
+      userId: req.user.id,
+    },
+    include: {
+      items: {
+        include: {
+          product: true,
+        },
+      },
+    },
+  });
+  // console.log(cart);
+
+  if (!cart) {
+    return res.status(404).send({
+      status: 404,
+      message: "Cart not found",
+      success: false,
+      data: null,
+      pagination: null,
+      error: "Not Found",
+    });
+  }
+
+  res.status(200).send({
+    status: 200,
+    message: "Cart fetched successfully",
+    success: true,
+    data: { cart },
+    error: null,
+    pagination: null,
+  });
+});
