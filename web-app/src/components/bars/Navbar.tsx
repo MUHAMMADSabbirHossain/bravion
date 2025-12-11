@@ -5,6 +5,7 @@ import { headers } from "next/headers";
 
 const navItems = [
   { name: "Home", href: "/" },
+  { name: "Shop", href: "/shop" },
   //   { name: "About", href: "/about" },
   //   { name: "Contact", href: "/contact" },
 ];
@@ -39,6 +40,7 @@ async function Navbar() {
           </>
         ) : (
           <>
+            <li></li>
             <li>
               <Link href="/login">Login</Link>
             </li>

@@ -1,3 +1,5 @@
+import AddToCartButton from "@/components/buttons/AddToCartButton";
+
 async function ProductPage({
   searchParams,
 }: {
@@ -25,6 +27,7 @@ async function ProductPage({
           <h1>Name: {data?.data?.product?.title}</h1>
           <p>Description: {data?.data?.product?.description}</p>
           <p>Price: ${data?.data?.product?.price}</p>
+          <AddToCartButton id={data?.data?.product?.id} />
         </div>
       </section>
     </>

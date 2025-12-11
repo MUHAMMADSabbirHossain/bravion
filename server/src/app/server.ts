@@ -376,3 +376,123 @@ app.get("/api/v1/products/:id", async (req: Request, res: Response) => {
     error: null,
   });
 });
+
+app.put(
+  "/api/v1/cart/items",
+  verifyAuth,
+  async (req: Request, res: Response) => {
+    console.log(req.body);
+
+    const { productId, productQuantity } = req.body;
+    const userId = req.user.id;
+    console.log(userId);
+
+    if (!userId || !productId || productQuantity < 0) {
+      return res.status(400).send({
+        message: "Invalid request inputs",
+        data: null,
+        success: false,
+        error: "Bad Request",
+        status: 400,
+        pagination: null,
+      });
+    }
+
+    const userCart = await prisma.cart.upsert({
+      where: {
+        userId: userId,
+      },
+      create: {
+        userId: userId,
+      },
+      update: {},
+      include: {
+        items: {
+          include: {
+            product: true,
+          },
+        },
+      },
+    });
+    console.log({ userCart });
+
+    // Now, upsert the specific item within the user's cart
+    // This uses upsert on the CartItem model
+    let updatedCartItem;
+    if (productQuantity === 0) {
+      // If quantity is 0, delete the item from the cart
+      updatedCartItem = await prisma.cartItem
+        .delete({
+          where: {
+            cartId_productId: {
+              // Use the composite unique key
+              cartId: userCart.id,
+              productId: productId,
+            },
+          },
+          include: {
+            product: true, // Include product details for the response
+          },
+        })
+        .catch((e) => {
+          // If the item doesn't exist, delete will throw an error
+          // We can ignore this error if the goal is just to ensure it's removed
+          if (e.code === "P2025") {
+            // Record to delete does not exist
+            console.log("Item to delete was not found in cart, ignoring.");
+            return null; // Return null or handle as needed
+          }
+          throw e; // Re-throw if it's a different error
+        });
+    } else {
+      // If quantity > 0, upsert the item (create or update)
+      updatedCartItem = await prisma.cartItem.upsert({
+        where: {
+          cartId_productId: {
+            // Use the composite unique key
+            cartId: userCart.id,
+            productId: productId,
+          },
+        },
+        create: {
+          cartId: userCart.id, // Link to the user's cart
+          productId: productId, // Link to the specific product
+          quantity: productQuantity, // Set the initial quantity
+        },
+        update: {
+          quantity: productQuantity, // Update the quantity if the item exists
+          // You could also update updatedAt here if needed
+        },
+        include: {
+          product: true, // Include product details for the response
+        },
+      });
+    }
+    console.log({ updatedCartItem });
+
+    // Fetch the *updated* cart state to return the final list of items
+    // This ensures the response reflects the state after the upsert/delete operation
+    const finalCartState = await prisma.cart.findUnique({
+      where: { id: userCart.id },
+      include: {
+        items: {
+          include: {
+            product: true,
+          },
+        },
+      },
+    });
+
+    res.status(200).send({
+      status: 200,
+      message: "Cart item updated successfully",
+      success: true,
+      data: {
+        cart: finalCartState, // Return the updated cart state
+        updatedItem: updatedCartItem, // Return details of the item that was upserted/deleted (might be null if deleted and didn't exist)
+      },
+      error: null,
+      pagination: null,
+    });
+  }
+);
