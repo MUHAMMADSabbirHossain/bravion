@@ -1,4 +1,5 @@
 import { headers } from "next/headers";
+import CartItems from "./CartItems";
 
 async function CartPage() {
   const response = await fetch(
@@ -13,20 +14,11 @@ async function CartPage() {
     }
   );
   const data = await response.json();
-  console.log(data);
+  // console.log(data);
 
   return (
     <>
-      <ul className="flex gap-4">
-        {data?.data?.cart?.items.map((item: any) => (
-          <li key={item.id} className="border-2  rounded-2xl p-4">
-            <p>{item?.product?.name}</p>
-            <p>Description: {item?.product?.description}</p>
-            <p>Quentity: {item.quantity}</p>
-            <p>Price: ${item?.product?.price}</p>
-          </li>
-        ))}
-      </ul>
+      <CartItems data={data} />
     </>
   );
 }
