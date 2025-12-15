@@ -1,11 +1,13 @@
 "use client";
 
 import { updateCartItem } from "@/utility/shared";
+import Link from "next/link";
 import { useState } from "react";
 
 function CartItems({ data }) {
   const [items, setItems] = useState(data?.data?.cart?.items || []);
   const [isUpdatedItem, setUpdatedItem] = useState(false);
+  const [orderCheckoutItems, setOrderCheckoutItems] = useState([]);
 
   const handleChangeCartItem = (event) => {
     // console.log(event.target.value, event.target.id);
@@ -57,9 +59,29 @@ function CartItems({ data }) {
     }
   }
 
+  function handleOrderCheckoutItems(event) {
+    if (event.target.checked === true) {
+      const selectedProduct = items.find((item) => item.id === event.target.id);
+
+      setOrderCheckoutItems((prevItems) => {
+        return [
+          ...prevItems,
+          {
+            id: selectedProduct?.id,
+            quantity: selectedProduct?.quantity,
+          },
+        ];
+      });
+    } else {
+      setOrderCheckoutItems((prevItems) => {
+        return prevItems.filter((item) => item.id !== event.target.id);
+      });
+    }
+  }
+
   return (
     <>
-      <h1>All Cart Items</h1>
+      <h1>All Cart Items (Select and Order)</h1>
 
       <ul className="flex gap-4">
         {items.map((item) => (
@@ -68,23 +90,34 @@ function CartItems({ data }) {
               {item?.product?.name} ({item?.product?.title})
             </p>
             <p>Description: {item?.product?.description}</p>
-            <p>
+            <div>
               <label htmlFor="quantity">Quentity: </label>
               <input
                 type="number"
                 defaultValue={item?.quantity}
                 name="quantity"
                 id={item?.id}
+                value={item?.product?.quantity}
                 onChange={handleChangeCartItem}
               />
-            </p>
+            </div>
             <p>Price: ${item?.product?.price}</p>
+            <div>
+              <label htmlFor="checkbox"></label>
+              <input
+                type="checkbox"
+                name="checkbox"
+                id={item?.id}
+                onChange={handleOrderCheckoutItems}
+              />
+            </div>
           </li>
         ))}
       </ul>
 
+      {orderCheckoutItems?.length > 0 && <Link href="/checkout">Checkout</Link>}
+
       {isUpdatedItem && <button onClick={handleSaveCart}>Save Cart</button>}
-      {/* <pre>{JSON.stringify(data?.data?.cart?.items, null, 2)}</pre> */}
     </>
   );
 }
